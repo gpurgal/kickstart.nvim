@@ -8,9 +8,9 @@ opt.shiftwidth = 2
 opt.expandtab = true
 opt.autoindent = true
 
+vim.cmd 'let g:netrw_liststyle = 3'
+
 return {
   opt,
-
-  vim.cmd 'let g:netrw_liststyle = 3',
   -- vim.keymap.set('i', 'jk', '<ESC>', { desc = 'Exit insert mode with jk' }),
 }
