@@ -95,6 +95,37 @@ return {
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
+        'codelldb',
+        'cpptools',
+      },
+    }
+
+    -- Adjust these paths if you have Mason in a custom location:
+    local mason_path = vim.fn.stdpath 'data' .. '/mason/packages/codelldb/extension'
+    local codelldb_path = mason_path .. '/adapter/codelldb'
+    local liblldb_path = mason_path .. '/lldb/lib/liblldb.dylib' -- use .dylib on macOS
+
+    dap.adapters.codelldb = {
+      type = 'server',
+      port = '${port}',
+      executable = {
+        command = codelldb_path,
+        args = { '--liblldb', liblldb_path, '--port', '${port}' },
+      },
+    }
+
+    dap.configurations.rust = {
+      {
+        name = 'Debug executable',
+        type = 'codelldb',
+        request = 'launch',
+        program = function()
+          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/target/debug/', 'file')
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        args = {}, -- pass CLI args here if needed
+        runInTerminal = false,
       },
     }
 
